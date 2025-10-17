@@ -1,0 +1,35 @@
+run:
+  timeout: 5m
+  tests: true
+  skip-dirs:
+    - node_modules
+    - .next
+    - out
+
+linters:
+  enable:
+    - errcheck      # Errores no manejados
+    - gosimple      # Simplificación de código
+    - govet         # Código sospechoso
+    - ineffassign   # Asignaciones inútiles
+    - staticcheck   # Análisis estático
+    - unused        # Código no usado
+    - gofmt         # Formato Go
+    - goimports     # Imports
+    - revive        # Linting moderno
+    - gosec         # Seguridad
+
+linters-settings:
+  gofmt:
+    simplify: true
+  goimports:
+    local-prefixes: github.com/tu-usuario/burst-calculator
+  revive:
+    rules:
+      - name: exported
+        disabled: false
+
+issues:
+  exclude-use-default: false
+  max-issues-per-linter: 0
+  max-same-issues: 0

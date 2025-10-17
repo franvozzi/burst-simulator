@@ -1,95 +1,87 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client';
+
+import { useState } from 'react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import BurstForm from '@/components/BurstForm';
+import ResultsTable from '@/components/ResultsTable';
+import BurstChart from '@/components/BurstChart';
+import { BurstConfig, BurstResult, SimulationData } from '@/types/burst';
+import { calculateBurst, simulateBurst } from '@/utils/burstCalculations';
+import { AlertCircle } from 'lucide-react';
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState<BurstResult | null>(null);
+  const [simulation, setSimulation] = useState<SimulationData | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+  const handleCalculate = async (config: BurstConfig) => {
+    setLoading(true);
+    setError(null);
+    setResult(null);
+    setSimulation(null);
+
+    try {
+      const [burstResult, simulationData] = await Promise.all([
+        calculateBurst(config),
+        simulateBurst(config),
+      ]);
+
+      setResult(burstResult);
+      setSimulation(simulationData);
+    } catch (err) {
+      setError('Error al calcular los valores de burst. Verifica que el backend esté funcionando.');
+      console.error('Error calculating burst:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-primary-custom text-white shadow-lg">
+        <div className="container mx-auto px-4 py-8 md:py-12 max-w-7xl">
+          <h1 className="text-3xl md:text-5xl font-bold text-center mb-3">
+            MikroTik Burst Limit Calculator
+          </h1>
+          <p className="text-base md:text-lg text-center opacity-95">
+            Academia de Entrenamientos - Calculadora de Burst para Redes
+          </p>
         </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </div>
+
+      {/* Contenido */}
+      <div className="container mx-auto px-4 py-8 max-w-7xl">
+        <div className="mb-6">
+          <BurstForm onCalculate={handleCalculate} loading={loading} />
+        </div>
+
+        {error && (
+          <Alert variant="destructive" className="mb-6">
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+
+        {result && (
+          <div className="mb-6">
+            <ResultsTable result={result} />
+          </div>
+        )}
+
+        {simulation && (
+          <div className="mb-6">
+            <BurstChart data={simulation} />
+          </div>
+        )}
+
+        <div className="text-center mt-8">
+          <p className="text-sm text-muted-foreground">
+            Calculadora profesional para configuración de límites de burst en routers MikroTik
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

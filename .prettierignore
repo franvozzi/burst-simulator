@@ -1,0 +1,10 @@
+node_modules
+.next
+out
+dist
+build
+.vercel
+*.config.js
+*.config.mjs
+package-lock.json
+bun.lockb
