@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { cn } from '@/lib/utils';
 
-export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> { }
+// Cambiamos el interface vacío por un type alias
+export type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, ...props }, ref) => {
@@ -14,12 +14,13 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           className
         )}
         ref={ref}
-        suppressHydrationWarning  // ← Agregar esto
+        suppressHydrationWarning
         {...props}
       />
     );
   }
 );
+
 Input.displayName = 'Input';
 
 export { Input };

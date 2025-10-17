@@ -1,16 +1,13 @@
 import '@testing-library/jest-dom';
-import { expect, afterEach, vi } from 'vitest';
+import { afterEach, vi } from 'vitest'; // Removido 'expect'
 import { cleanup } from '@testing-library/react';
 
-// Cleanup después de cada test
 afterEach(() => {
     cleanup();
 });
 
-// Mock de fetch global
 global.fetch = vi.fn();
 
-// Mock de Recharts
 vi.mock('recharts', () => ({
     LineChart: vi.fn(() => null),
     Line: vi.fn(() => null),
@@ -19,13 +16,12 @@ vi.mock('recharts', () => ({
     CartesianGrid: vi.fn(() => null),
     Tooltip: vi.fn(() => null),
     Legend: vi.fn(() => null),
-    ResponsiveContainer: ({ children }: any) => children,
+    ResponsiveContainer: ({ children }: { children: React.ReactNode }) => children,
 }));
 
-// Mock de window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
     writable: true,
-    value: vi.fn().mockImplementation((query) => ({
+    value: vi.fn().mockImplementation((query: string) => ({
         matches: false,
         media: query,
         onchange: null,
@@ -37,7 +33,6 @@ Object.defineProperty(window, 'matchMedia', {
     })),
 });
 
-// Mock de ResizeObserver
 global.ResizeObserver = vi.fn().mockImplementation(() => ({
     observe: vi.fn(),
     unobserve: vi.fn(),

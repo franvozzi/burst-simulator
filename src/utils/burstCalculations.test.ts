@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { calculateBurst, simulateBurst } from './burstCalculations';
-import type { BurstConfig } from '@/types/burst';
+import type { BurstConfig } from '../types/burst';
 
 const mockConfig: BurstConfig = {
     maxLimitUpload: '512K',
@@ -41,7 +41,7 @@ describe('burstCalculations', () => {
                 rateLimit: '512K/1M 1M/2M',
             };
 
-            (global.fetch as any).mockResolvedValueOnce({
+            (global.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
                 ok: true,
                 json: async () => mockResponse,
             });
@@ -58,7 +58,7 @@ describe('burstCalculations', () => {
         });
 
         it('throws error on failed request', async () => {
-            (global.fetch as any).mockResolvedValueOnce({
+            (global.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
                 ok: false,
                 status: 500,
             });
@@ -74,7 +74,7 @@ describe('burstCalculations', () => {
                 download: [{ time: 0, speed: 2000 }],
             };
 
-            (global.fetch as any).mockResolvedValueOnce({
+            (global.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
                 ok: true,
                 json: async () => mockResponse,
             });
