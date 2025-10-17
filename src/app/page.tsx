@@ -43,10 +43,10 @@ export default function Home() {
       <div className="bg-primary-custom text-white shadow-lg">
         <div className="container mx-auto px-4 py-8 md:py-12 max-w-7xl">
           <h1 className="text-3xl md:text-5xl font-bold text-center mb-3">
-            MikroTik Burst Limit Calculator
+            Burst Limit Calculator
           </h1>
           <p className="text-base md:text-lg text-center opacity-95">
-            Academia de Entrenamientos - Calculadora de Burst para Redes
+            Calculadora de Burst para Redes
           </p>
         </div>
       </div>
@@ -78,7 +78,7 @@ export default function Home() {
 
         <div className="text-center mt-8">
           <p className="text-sm text-muted-foreground">
-            Calculadora profesional para configuración de límites de burst en routers MikroTik
+            Calculadora para configuración de límites de burst en routers MikroTik
           </p>
         </div>
       </div>
