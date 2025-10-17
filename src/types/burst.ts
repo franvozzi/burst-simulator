@@ -10,23 +10,18 @@ export interface BurstConfig {
   priority: number;
 }
 
+export interface BurstDirection {
+  maxLimit: string;
+  burstLimit: string;
+  burstThreshold: string;
+  burstTime: number;
+  limitAt: string;
+  burstDuration: number;
+}
+
 export interface BurstResult {
-  upload: {
-    maxLimit: string;
-    burstLimit: string;
-    burstThreshold: string;
-    burstTime: number;
-    limitAt: string;
-    burstDuration: number;
-  };
-  download: {
-    maxLimit: string;
-    burstLimit: string;
-    burstThreshold: string;
-    burstTime: number;
-    limitAt: string;
-    burstDuration: number;
-  };
+  upload: BurstDirection;
+  download: BurstDirection;
   rateLimit: string;
 }
 
